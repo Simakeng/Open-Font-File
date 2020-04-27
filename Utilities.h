@@ -22,8 +22,8 @@ namespace OpenFont
 			throw FileIOException("End of file too early!");
 		return res;
 	}
-
-	int MaxPowerOf2(int rhs)
+	template<typename T>
+	auto MaxPowerOf2(T rhs)
 	{
 		int i = 0;
 		int v = rhs;

@@ -1,4 +1,7 @@
 #pragma once
+#include <deque>
+#include "Types.h"
+
 namespace OpenFont 
 {
 	class Font 

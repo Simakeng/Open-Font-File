@@ -52,13 +52,15 @@ namespace OpenFont
 			for (int i = 0; i < offsetTable.numTables; i++)
 				tablesRecs.emplace_back(Read<TableRecord>(fp));
 
-			for (auto& tableRec : tablesRecs) 
+			for (auto& tableRec : tablesRecs)
 			{
 				u32 offset = tableRec.offset;
 				u32 length = tableRec.length;
-				Table table = { tableRec , new uint8_t[length] };
+				Table table = { tableRec , length };
 				fseek(fp, offset, SEEK_SET);
-				if(fread(table.tableData, 1, length, fp))
+				if (fread(table.tableData, 1, length, fp) != length)
+					throw FileIOException("End of file too early!");
+				tables.emplace_back(std::move(table));
 			}
 
 			if (fp != nullptr)

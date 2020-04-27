@@ -5,7 +5,6 @@ namespace OpenFont
 {
 	using char_type = wchar_t;
 
-
 	template<typename T>
 	struct BigEndingType
 	{
@@ -14,7 +13,7 @@ namespace OpenFont
 			return BELEConv(value);
 		}
 		template<typename T>
-		T* data() 
+		T* data()
 		{
 			return reinterpret_cast<T*>(value);
 		}
@@ -56,19 +55,18 @@ namespace OpenFont
 	class TableData
 	{
 	private:
-		uint8_t* tableData;
+		uint8_t* pData;
 	public:
 		TableData(size_t length);
-		~TableData() 
-		{
-
-		}
-
+		TableData(TableData&& rhs);
+		~TableData();
+		template<typename T>
+		operator T* () { return reinterpret_cast<T*>(pData); }
 	};
 
 	struct Table
 	{
 		TableRecord tableRecord;
-		TableData* tableData;
+		TableData tableData;
 	};
 }

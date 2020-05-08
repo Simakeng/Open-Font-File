@@ -1,5 +1,14 @@
 #pragma once
 #include "Exceptions.h"
+
+#define LITTLE_ENDIAN true
+
+#if LITTLE_ENDIAN == true
+
+#define MAKE_BE_CONSTANT_U16(v) ((((v) << 8) & 0xFF00) | (((v) >> 8)&0x00FF))
+
+#endif // LITTLE_ENDIAN == true
+
 namespace OpenFont
 {
 	template <typename T>
@@ -31,5 +40,6 @@ namespace OpenFont
 			i = i << 1 | 1;
 		return i + 1;
 	};
+
 
 }

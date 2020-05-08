@@ -65,6 +65,29 @@ namespace OpenFont
 
 			if (fp != nullptr)
 				fclose(fp);
+
+			for (auto& table : this->tables)
+			{
+				if (table.tableRecord.tableTag != "cmap")
+					continue;
+				using namespace cmap;
+				auto& data = table.tableData;
+				TableHeader& header = *(TableHeader*)(data);
+				EncodingRecorder* record = (EncodingRecorder*)(data + sizeof(TableHeader));
+
+				for (auto i = 0; i < header.numTable; i++)
+				{
+					if (record[i].PlatformID != PlatformID::Unicode)
+						continue;
+					if (record[i].encodingID != EncodingID::Unicode::Unicode_BMP)
+						continue;
+
+					auto off = record[i].offset;
+					printf("platformID: %d\n", (int)record[i].PlatformID);
+					printf("encodingID: %d\n", (int)record[i].encodingID);
+					printf("===========\n");
+				}
+			}
 		}
 		catch (const std::exception&)
 		{

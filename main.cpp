@@ -7,7 +7,6 @@ int main()
 	try
 	{
 		auto font = Font(R"(C:\Windows\Fonts\SourceHanSansSC-Regular.otf)");
-
 	
 	}
 	catch (const std::exception& exc)

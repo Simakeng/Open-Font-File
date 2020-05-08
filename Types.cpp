@@ -18,3 +18,7 @@ namespace OpenFont
 	}
 }
 
+OpenFont::cmap::Subtables::BasicSubtable::BasicSubtable(void* bufferData)
+{
+	*this = *(BasicSubtable*)bufferData;
+}

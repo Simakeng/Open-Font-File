@@ -86,6 +86,9 @@ namespace OpenFont
 					printf("platformID: %d\n", (int)record[i].PlatformID);
 					printf("encodingID: %d\n", (int)record[i].encodingID);
 					printf("===========\n");
+					bu16& subTableFormat = *(bu16*)(data + off);
+					printf("tableFormat: %d\n", (int)subTableFormat);
+
 				}
 			}
 		}

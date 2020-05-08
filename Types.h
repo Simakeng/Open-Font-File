@@ -62,6 +62,23 @@ namespace OpenFont
 
 	using u8 = uint8_t;
 
+	//   |     |  |
+	// 0x 12 34 56  big endian
+	// 0x 56 34 12  little endian
+
+#pragma pack(push,1)
+	struct u24
+	{
+		u16 h;
+		u8 l;
+	};
+	struct bu24
+	{
+		u8 l;
+		bu16 h;
+	};
+#pragma pack(pop)
+
 	struct tag
 	{
 		u8 data[4];
@@ -163,13 +180,59 @@ namespace OpenFont
 
 		namespace Subtables
 		{
-			// Macintosh platform standard character to glyph index mapping table
-			class F0
+#pragma pack(push,1)
+			// Each table
+			class BasicSubtable 
 			{
+			public:
+				BasicSubtable(void* bufferData);
+				~BasicSubtable();
+			protected:
 				bu16 format;
 				bu16 length;
-				bu16 language;
 			};
+			/**
+				Macintosh platform standard character to glyph index mapping table
+			*/
+			class F0 : BasicSubtable
+			{
+				bu16 language;
+				u8 glyphIdArray[256];
+			};
+			/**
+				High byte mapping through table
+				This subtable is useful for the national character code standards used for Japanese, Chinese, and Korean
+				characters. These code standards use a mixed 8/16-bit encoding, in which certain byte values signal the first
+				byte of a 2-byte character (but these values are also legal as the second byte of a 2-byte character).
+			*/ 
+			class F2 : BasicSubtable
+			{
+				bu16 language;
+				bu16 subHeaderKeys[256];
+
+				struct SubHeader 
+				{
+					bu16 firstCode;
+					bu16 entryCount;
+					bi16 idDelta;
+					bu16 idRangeOffset;
+				};
+
+				SubHeader* subHeaders;
+				bu16* glyphIndexArray;
+			};
+
+			class F4 : BasicSubtable
+			{
+				bu16 language;
+				bu16 segCountX2;
+				bu16 searchRange;
+				bu16 entrySelector;
+				bu16 rangeShift;
+			};
+
+
+#pragma pack (pop)
 		}
 	}
 }
